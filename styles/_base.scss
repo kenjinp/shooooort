@@ -2,7 +2,7 @@
 $font-stack: Helvetica, sans-serif;
 @font-face {
   font-family: Montserrat;
-  src: url(/font/Montserrat-Regular.ttf) format('ttf');
+  src: url('/font/Montserrat-Regular.ttf') format('ttf');
 }
 
 //!\\ Colors //!\\
@@ -11,9 +11,9 @@ $accent:                #eb4a42;
 $background:            #fcfbfa;
 $background-light:      #eaeaea;
 // text
-$text-primary:          #555555;
-$text-seconday:         #aaaaaa;
-$text-unimportant:      #cccccc;
+$text-primary:          #555;
+$text-seconday:         #aaa;
+$text-unimportant:      #ccc;
 $text-button-disabled:  #bfbfbf;
 // bits & bobs
 $button-disabled-back:  #e0e0e0;

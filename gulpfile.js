@@ -3,9 +3,12 @@
 var gulp = require('gulp'),
     changed = require('gulp-changed'),
     sass = require('gulp-sass'),
+    scsslint = require('gulp-scss-lint'),
+    jshint = require('gulp-jshint'),
     csso = require('gulp-csso'),
     autoprefixer = require('gulp-autoprefixer'),
     browserify = require('browserify'),
+    reactify = require('reactify'),
     watchify = require('watchify'),
     source = require('vinyl-source-stream'),
     buffer = require('vinyl-buffer'),
@@ -15,9 +18,12 @@ var gulp = require('gulp'),
     notify = require('gulp-notify'),
     browserSync = require('browser-sync'),
     sourcemaps = require('gulp-sourcemaps'),
+    karma = require('gulp-karma'),
+
     reload = browserSync.reload,
     p = {
-      jsx: './scripts/app.jsx',
+      test: './tests/*.js',
+      jsx: './scripts/app.js',
       scss: 'styles/*.scss',
       html: './*.html',
       fonts: 'styles/fonts/*.ttf',
@@ -40,7 +46,7 @@ gulp.task('browserSync', function() {
   });
 });
 
-gulp.task('watchify', function() {
+gulp.task('watchify', ['jshint'], function() {
   var bundler = watchify(browserify(p.jsx, watchify.args));
 
   function rebundle() {
@@ -52,14 +58,14 @@ gulp.task('watchify', function() {
       .pipe(reload({stream: true}));
   }
 
-  bundler.transform(babelify)
+  bundler.transform(reactify)
   .on('update', rebundle);
   return rebundle();
 });
 
 gulp.task('browserify', function() {
   browserify(p.jsx)
-    .transform(babelify)
+    .transform(reactify)
     .bundle()
     .pipe(source(p.bundle))
     .pipe(buffer())
@@ -87,22 +93,51 @@ gulp.task('htmlpage', function() {
     .pipe(reload({stream: true}));
 });
 
-//assets
+//all assets?
 gulp.task('fonts', function() {
   return gulp.src(p.fonts)
     .pipe(gulp.dest(p.distFonts));
-})
+});
+
+gulp.task('scss-lint', function() {
+  gulp.src(p.scss)
+    .pipe(scsslint())
+    .pipe(scsslint.failReporter())
+    .on('error', notify.onError());
+});
+
+gulp.task('jshint', function() {
+  gulp.src(p.jsx)
+    .pipe(jshint({linter: require('jshint-jsx').JSXHINT}))
+    .pipe(jshint.reporter('default'))
+    .pipe(jshint.reporter('fail'))
+    .on('error', notify.onError());
+});
+
+gulp.task('test', function() {
+  return gulp.src(p.test)
+    .pipe(karma({
+      configFile: 'karma.conf.js',
+      action: 'run'
+    }))
+    .on('error', notify.onError());
+});
 
 gulp.task('watchTask', function() {
-    //jsx watch taken care of by watchify
+    //watch js for linting
+  gulp.watch(p.jsx, ['jshint']);
     //wacth for scss changes
-  gulp.watch(p.scss, ['styles']);
+  gulp.watch(p.scss, ['styles', 'scss-lint']);
     //watch for html changes
   gulp.watch(p.html, ['htmlpage']);
 });
 
 gulp.task('watch', ['clean'], function() {
   gulp.start(['browserSync', 'watchify', 'watchTask', 'styles', 'fonts']);
+});
+
+gulp.task('tests', ['clean'], function() {
+  gulp.start(['build', 'test']);
 });
 
 gulp.task('build', ['clean'], function() {

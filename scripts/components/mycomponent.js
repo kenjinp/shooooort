@@ -1,12 +1,13 @@
-import React from 'react'
-import pack from '../../package.json'
+var React = require('react'),
+    pack = require('../../package.json');
 
-let Mycomponent = React.createClass({
+var Mycomponent = React.createClass({
   render: function() {
-    let version = pack.version,
+    var version = pack.version,
         deps;
 
-    deps = Object.keys(pack.devDependencies).map((dep, i) => <li key={i}>{dep}</li>);
+    deps = ['hi', 'hello'];
+    //Object.keys(pack.devDependencies).map((dep, i) => <li key={i}>{dep}</li>);
 
     return (
       <div>
@@ -21,4 +22,4 @@ let Mycomponent = React.createClass({
   }
 });
 
-export default Mycomponent;
+module.exports = Mycomponent;

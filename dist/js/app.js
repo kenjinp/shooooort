@@ -1,17 +1,13 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-"use strict";
-
-var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
-
-var React = _interopRequire(require("react"));
-
-var MyComponent = _interopRequire(require("./components/mycomponent.jsx"));
+var React = require('react'),
+    MyComponent = require('./components/mycomponent.js');
 
 window.React = React;
 
-React.render(React.createElement(MyComponent, null), document.getElementById("content"));
+React.render(React.createElement(MyComponent, null), document.getElementById('content'));
 
-},{"./components/mycomponent.jsx":159,"react":157}],2:[function(require,module,exports){
+
+},{"./components/mycomponent.js":159,"react":157}],2:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -19785,10 +19781,23 @@ module.exports={
     "gulp-autoprefixer": "2.1.0",
     "gulp-changed": "^1.2.1",
     "gulp-csso": "^1.0.0",
+    "gulp-jshint": "^1.10.0",
+    "gulp-karma": "0.0.4",
     "gulp-notify": "^2.2.0",
     "gulp-sass": "^1.3.3",
+    "gulp-scss-lint": "^0.1.12",
     "gulp-sourcemaps": "^1.5.0",
     "gulp-uglify": "^1.1.0",
+    "jasmine-core": "^2.3.0",
+    "jasmine-react-helpers": "^0.2.2",
+    "jshint-jsx": "^0.4.1",
+    "jsxhint": "^0.14.0",
+    "karma": "^0.12.31",
+    "karma-chrome-launcher": "^0.1.8",
+    "karma-firefox-launcher": "^0.1.4",
+    "karma-jasmine": "^0.3.5",
+    "karma-safari-launcher": "^0.1.1",
+    "reactify": "^1.1.0",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0",
     "watchify": "^2.4.0"
@@ -19796,57 +19805,31 @@ module.exports={
 }
 
 },{}],159:[function(require,module,exports){
-"use strict";
+var React = require('react'),
+    pack = require('../../package.json');
 
-var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
-
-var React = _interopRequire(require("react"));
-
-var pack = _interopRequire(require("../../package.json"));
-
-var Mycomponent = React.createClass({
-  displayName: "Mycomponent",
-
-  render: function render() {
+var Mycomponent = React.createClass({displayName: "Mycomponent",
+  render: function() {
     var version = pack.version,
-        deps = undefined;
+        deps;
 
-    deps = Object.keys(pack.devDependencies).map(function (dep, i) {
-      return React.createElement(
-        "li",
-        { key: i },
-        dep
-      );
-    });
+    deps = ['hi', 'hello'];
+    //Object.keys(pack.devDependencies).map((dep, i) => <li key={i}>{dep}</li>);
 
-    return React.createElement(
-      "div",
-      null,
-      React.createElement(
-        "h1",
-        { className: "Mycomponent" },
-        "Welcome to ⚛ React Starterify ",
-        version
-      ),
-      React.createElement(
-        "h2",
-        null,
-        "Hello World"
-      ),
-      React.createElement(
-        "p",
-        null,
-        "This app Powered by:"
-      ),
-      React.createElement(
-        "ul",
-        null,
-        deps
+    return (
+      React.createElement("div", null, 
+        React.createElement("h1", {className: "Mycomponent"}, "Welcome to ⚛ React Starterify ", version), 
+        React.createElement("h2", null, "Hello World"), 
+        React.createElement("p", null, "This app Powered by:"), 
+        React.createElement("ul", null, 
+          deps
+        )
       )
-    );
+    )
   }
 });
 
 module.exports = Mycomponent;
+
 
 },{"../../package.json":158,"react":157}]},{},[1]);

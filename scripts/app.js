@@ -1,5 +1,5 @@
-import React from 'react'
-import MyComponent from './components/mycomponent.jsx'
+var React = require('react'),
+    MyComponent = require('./components/mycomponent.js');
 
 window.React = React;
 
