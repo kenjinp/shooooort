@@ -11,6 +11,7 @@ let Mycomponent = React.createClass({
     return (
       <div>
         <h1 className="Mycomponent">Welcome to &#9883; React Starterify {version}</h1>
+        <h2>Hello World</h2>
         <p>This app Powered by:</p>
         <ul>
           {deps}

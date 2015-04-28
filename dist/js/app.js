@@ -19751,13 +19751,13 @@ module.exports = require('./lib/React');
 
 },{"./lib/React":30}],158:[function(require,module,exports){
 module.exports={
-  "name": "react-starterify",
-  "version": "0.0.9",
-  "description": "React JS application skeleton using Browserify and other awesome tools",
+  "name": "shooooort!",
+  "version": "0.0.1",
+  "description": "React JS application to shorten URLS",
   "main": "app.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Granze/react-starterify"
+    "url": "https://github.com/kenjinp/shooooort"
   },
   "keywords": [
     "gulp",
@@ -19770,12 +19770,8 @@ module.exports={
     "6to5",
     "babel"
   ],
-  "author": "Maurizio Mangione",
+  "author": "Kenny, Impraise Guys",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/Granze/react-starterify/issues"
-  },
-  "homepage": "https://github.com/Granze/react-starterify",
   "dependencies": {
     "react": "^0.13.0",
     "superagent": "^1.0.0"
@@ -19831,6 +19827,11 @@ var Mycomponent = React.createClass({
         { className: "Mycomponent" },
         "Welcome to ⚛ React Starterify ",
         version
+      ),
+      React.createElement(
+        "h2",
+        null,
+        "Hello World"
       ),
       React.createElement(
         "p",

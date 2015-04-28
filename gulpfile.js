@@ -18,10 +18,14 @@ var gulp = require('gulp'),
     reload = browserSync.reload,
     p = {
       jsx: './scripts/app.jsx',
-      scss: 'styles/main.scss',
+      scss: 'styles/*.scss',
+      html: './*.html',
+      fonts: 'styles/fonts/*.ttf',
       bundle: 'app.js',
       distJs: 'dist/js',
-      distCss: 'dist/css'
+      distCss: 'dist/css',
+      distHtml: './',
+      distFonts: 'dist/css/fonts/',
     };
 
 gulp.task('clean', function(cb) {
@@ -66,7 +70,7 @@ gulp.task('browserify', function() {
 });
 
 gulp.task('styles', function() {
-  return gulp.src(p.scss)
+  gulp.src(p.scss)
     .pipe(changed(p.distCss))
     .pipe(sass({errLogToConsole: true}))
     .on('error', notify.onError())
@@ -76,17 +80,34 @@ gulp.task('styles', function() {
     .pipe(reload({stream: true}));
 });
 
+gulp.task('htmlpage', function() {
+  gulp.src(p.html)
+    .pipe(changed(p.html))
+    .pipe(gulp.dest(p.distHtml))
+    .pipe(reload({stream: true}));
+});
+
+//assets
+gulp.task('fonts', function() {
+  return gulp.src(p.fonts)
+    .pipe(gulp.dest(p.distFonts));
+})
+
 gulp.task('watchTask', function() {
+    //jsx watch taken care of by watchify
+    //wacth for scss changes
   gulp.watch(p.scss, ['styles']);
+    //watch for html changes
+  gulp.watch(p.html, ['htmlpage']);
 });
 
 gulp.task('watch', ['clean'], function() {
-  gulp.start(['browserSync', 'watchTask', 'watchify', 'styles']);
+  gulp.start(['browserSync', 'watchify', 'watchTask', 'styles', 'fonts']);
 });
 
 gulp.task('build', ['clean'], function() {
   process.env.NODE_ENV = 'production';
-  gulp.start(['browserify', 'styles']);
+  gulp.start(['browserify', 'styles', 'fonts']);
 });
 
 gulp.task('default', function() {

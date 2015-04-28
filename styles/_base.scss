@@ -1,3 +1,34 @@
-*, *:before, *:after {
-  box-sizing: border-box;
+//!\\ Variables //!\\
+$font-stack: Helvetica, sans-serif;
+@font-face {
+  font-family: Montserrat;
+  src: url(/font/Montserrat-Regular.ttf) format('ttf');
+}
+
+//!\\ Colors //!\\
+// main
+$accent:                #eb4a42;
+$background:            #fcfbfa;
+$background-light:      #eaeaea;
+// text
+$text-primary:          #555555;
+$text-seconday:         #aaaaaa;
+$text-unimportant:      #cccccc;
+$text-button-disabled:  #bfbfbf;
+// bits & bobs
+$button-disabled-back:  #e0e0e0;
+
+html {
+  background-color: $background;
+}
+
+//Logo
+h1 {
+  color: $accent;
+  font-family: Montserrat;
+}
+
+//secion headings
+h2 {
+  color: $text-primary;
 }
