@@ -115,7 +115,7 @@ gulp.task('jshint', function() {
 });
 
 gulp.task('test', function() {
-  return gulp.src(p.test)
+  gulp.src(p.test)
     .pipe(karma({
       configFile: 'karma.conf.js',
       action: 'run'
@@ -136,9 +136,9 @@ gulp.task('watch', ['clean'], function() {
   gulp.start(['browserSync', 'watchify', 'watchTask', 'styles', 'fonts']);
 });
 
-gulp.task('tests', ['clean'], function() {
-  gulp.start(['build', 'test']);
-});
+//gulp.task('tests', ['clean'], function() {
+//  gulp.start(['build', 'test']);
+//});
 
 gulp.task('build', ['clean'], function() {
   process.env.NODE_ENV = 'production';

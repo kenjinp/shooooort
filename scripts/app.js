@@ -3,4 +3,4 @@ var React = require('react'),
 
 window.React = React;
 
-React.render(<MyComponent />, document.getElementById('content'));
+React.render(<MyComponent hello="Hello World!"/>, document.getElementById('content'));
