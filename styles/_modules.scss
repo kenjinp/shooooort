@@ -1,0 +1,21 @@
+.logo {
+  @include rounded;
+  background: transparent;
+  box-shadow: 0 51px 0 0 $accent;
+  color: $accent;
+  display: inline-block;
+  font-family: 'Montserrat';
+  font-size: 47px;
+  height: 4px;
+  letter-spacing: -.015em;
+  margin-bottom: 51px;
+  width: 252px;
+}
+
+.tag-line {
+  display: inline;
+  float: right;
+  font-size: 16px;
+  margin-top: 30px;
+  padding: 0;
+}

@@ -46,7 +46,7 @@ gulp.task('browserSync', function() {
   });
 });
 
-gulp.task('watchify', ['jshint'], function() {
+gulp.task('watchify', function() {
   var bundler = watchify(browserify(p.jsx, watchify.args));
 
   function rebundle() {
@@ -102,7 +102,7 @@ gulp.task('fonts', function() {
 gulp.task('scss-lint', function() {
   gulp.src(p.scss)
     .pipe(scsslint())
-    .pipe(scsslint.failReporter())
+    .pipe(scsslint.failReporter('E'))
     .on('error', notify.onError());
 });
 
@@ -136,9 +136,6 @@ gulp.task('watch', ['clean'], function() {
   gulp.start(['browserSync', 'watchify', 'watchTask', 'styles', 'fonts']);
 });
 
-//gulp.task('tests', ['clean'], function() {
-//  gulp.start(['build', 'test']);
-//});
 
 gulp.task('build', ['clean'], function() {
   process.env.NODE_ENV = 'production';

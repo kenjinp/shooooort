@@ -1,8 +1,20 @@
 //!\\ Variables //!\\
 $font-stack: Helvetica, sans-serif;
 @font-face {
-  font-family: Montserrat;
-  src: url('/font/Montserrat-Regular.ttf') format('ttf');
+  font-family: 'Montserrat';
+  src: url('fonts/Montserrat-Regular.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Roboto-Light';
+  src: url('fonts/Roboto-Light.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Roboto-Regular';
+  src: url('fonts/Roboto-Regular.ttf') format('truetype');
+}
+
+@mixin rounded {
+  border-radius: 3px;
 }
 
 //!\\ Colors //!\\
@@ -12,7 +24,7 @@ $background:            #fcfbfa;
 $background-light:      #eaeaea;
 // text
 $text-primary:          #555;
-$text-seconday:         #aaa;
+$text-secondary:         #aaa;
 $text-unimportant:      #ccc;
 $text-button-disabled:  #bfbfbf;
 // bits & bobs
@@ -22,13 +34,20 @@ html {
   background-color: $background;
 }
 
-//Logo
-h1 {
-  color: $accent;
-  font-family: Montserrat;
+body {
+  margin: 0;
+  font-family: 'Roboto-Light';
 }
 
-//secion headings
+h1 {
+  color: $accent;
+}
+
 h2 {
   color: $text-primary;
+  font-size: 22px;
+}
+
+p {
+  color: $text-secondary;
 }
