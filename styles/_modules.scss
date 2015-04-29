@@ -19,3 +19,59 @@
   margin-top: 30px;
   padding: 0;
 }
+
+.input-holder {
+  height: 44px;
+  margin: 54px 0 77px;
+  position: relative;
+
+  .input-bar {
+    @include rounded;
+    background-color: $background-light;
+    border: 0;
+    color: $text-button-disabled;
+    font-size: 14px;
+    height: 44px;
+    letter-spacing: .06em;
+    padding:0 0 0 18px;
+    width: 458px;
+
+    &:focus {
+      color: $text-primary;
+    }
+  }
+
+  button {
+    background-color: $button-disabled-back;
+    color: $text-button-disabled;
+    float: right;
+    height: 44px;
+    letter-spacing: .06em;
+    width: 149px;
+
+    &.active {
+      background-color: $accent;
+      color: $background;
+    }
+  }
+}
+
+.list-holder {
+
+  .clear {
+    color: $accent;
+    cursor: pointer;
+    margin-left: 23px;
+  }
+
+  table {
+    margin: 32px 0;
+    th {
+      color: $text-button-disabled;
+      font-family: 'Roboto-Regular';
+      font-size: 14px;
+      text-align: left;
+      text-transform: uppercase;
+    }
+  }
+}

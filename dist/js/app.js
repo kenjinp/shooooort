@@ -19751,8 +19751,12 @@ var React = require('react');
 var InputBar = React.createClass({displayName: "InputBar",
   render: function() {
     return (
-      React.createElement("div", null, 
-        React.createElement("h1", {className: "input-bar"}, "INPUT BAR")
+      React.createElement("div", {className: "input-holder"}, 
+        React.createElement("input", {
+          className: "input-bar", 
+          type: "text", 
+          placeholder: "Paste the link you want to shorten here"}), 
+        React.createElement("button", null, "Shorten this link")
       )
     )
   }
@@ -19766,9 +19770,27 @@ var React = require('react');
 
 var LinkList = React.createClass({displayName: "LinkList",
   render: function() {
+    var links = this.props.links.map(function (link) {
+      return (
+        React.createElement("tr", null, 
+          React.createElement("td", null, " ",  link.shortUrl, " "), 
+          React.createElement("td", null, " ",  link.visits, " "), 
+          React.createElement("td", null, " ",  link.lastVisited, " ")
+        )
+      )
+    });
     return (
-      React.createElement("div", null, 
-        React.createElement("h1", {className: "link-list"}, "LINK LIST")
+      React.createElement("div", {className: "list-holder"}, 
+        React.createElement("h2", null, "Previously shortened by you"), 
+        React.createElement("span", {className: "clear"}, "Clear history"), 
+        React.createElement("table", null, 
+          React.createElement("tr", null, 
+            React.createElement("th", null, "Link"), 
+            React.createElement("th", null, "Visits"), 
+            React.createElement("th", null, "Last Visited")
+          ), 
+           links 
+        )
       )
     )
   }
@@ -19787,11 +19809,29 @@ var Shooooort = React.createClass({displayName: "Shooooort",
     return (
       React.createElement("div", null, 
         React.createElement(InputBar, null), 
-        React.createElement(LinkList, null)
+        React.createElement(LinkList, {links:  linkDummy })
       )
     )
   }
 });
+
+var linkDummy = [
+  {
+    shortUrl: 'apple',
+    visits: 2341,
+    lastVisited: '2 days ago'
+  },
+  {
+    shortUrl: 'bannana',
+    visits: 9001,
+    lastVisited: '1 days ago'
+  },
+  {
+    shortUrl: 'carrot',
+    visits: 3,
+    lastVisited: '1 month ago'
+  }
+]
 
 module.exports = Shooooort;
 

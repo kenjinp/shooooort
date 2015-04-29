@@ -3,8 +3,12 @@ var React = require('react');
 var InputBar = React.createClass({
   render: function() {
     return (
-      <div>
-        <h1 className="input-bar">INPUT BAR</h1>
+      <div className="input-holder">
+        <input
+          className="input-bar"
+          type="text"
+          placeholder="Paste the link you want to shorten here"/>
+        <button>Shorten this link</button>
       </div>
     )
   }
