@@ -1,6 +1,6 @@
 var React = require('react'),
-    MyComponent = require('./components/mycomponent.js');
+    Shooooort = require('./components/shooooort.js');
 
 window.React = React;
 
-React.render(<MyComponent hello="Hello World!"/>, document.getElementById('content'));
+React.render(<Shooooort />, document.getElementById('content'));

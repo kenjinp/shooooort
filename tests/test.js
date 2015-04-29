@@ -1,17 +1,34 @@
+var expect = require('chai').expect,
+    React = require('react/addons'),
+    Shooooort = require('../scripts/components/shooooort'),
+    LinkList = require('../scripts/components/linklist'),
+    InputBar = require('../scripts/components/inputbar');
 
-//var TestUtils = require('react-test-utils');
-var expect = require('chai').expect;
-
-//var ReactTestUtils = addons.ReactTestUtils;
-
-describe('tests', function() {
-  it('test something', function() {
-    var React = require('react/addons');
-    var myComponent = require('../scripts/components/mycomponent.js');
-    var TestUtils = React.addons.TestUtils;
-
-    var hello = <myComponent hello="testing"/>;
-    TestUtils.renderIntoDocument(hello);
-    expect(hello.props.hello).to.equal('testing');
+describe('Shooooort', function() {
+  beforeEach(function() {
+    TestUtils = React.addons.TestUtils;
+    var mainComponent = <Shooooort />;
+    TestUtils.renderIntoDocument(mainComponent);
   });
+
+  afterEach(function() {
+    React.unmountComponentAtNode(document.body);
+    document.body.innerHTML = '';
+  });
+
+  it('main component should render', function() {
+    var mainComponent = <Shooooort />;
+    expect(mainComponent).to.exist;
+  });
+
+  it('LinkList should render', function() {
+    var linklist = <LinkList />
+    expect(linklist).to.exist;
+  });
+
+  it('InputBar should render', function() {
+    var inputbar = <InputBar />
+    expect(inputbar).to.exist;
+  });
+
 });

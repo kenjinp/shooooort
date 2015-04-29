@@ -1,13 +1,13 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 var React = require('react'),
-    MyComponent = require('./components/mycomponent.js');
+    Shooooort = require('./components/shooooort.js');
 
 window.React = React;
 
-React.render(React.createElement(MyComponent, {hello: "Hello World!"}), document.getElementById('content'));
+React.render(React.createElement(Shooooort, null), document.getElementById('content'));
 
 
-},{"./components/mycomponent.js":158,"react":157}],2:[function(require,module,exports){
+},{"./components/shooooort.js":160,"react":157}],2:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -19748,17 +19748,52 @@ module.exports = require('./lib/React');
 },{"./lib/React":30}],158:[function(require,module,exports){
 var React = require('react');
 
-var Mycomponent = React.createClass({displayName: "Mycomponent",
+var InputBar = React.createClass({displayName: "InputBar",
   render: function() {
     return (
       React.createElement("div", null, 
-        React.createElement("h1", {className: "Mycomponent"}, this.props.hello)
+        React.createElement("h1", {className: "input-bar"}, "INPUT BAR")
       )
     )
   }
 });
 
-module.exports = Mycomponent;
+module.exports = InputBar;
 
 
-},{"react":157}]},{},[1]);
+},{"react":157}],159:[function(require,module,exports){
+var React = require('react');
+
+var LinkList = React.createClass({displayName: "LinkList",
+  render: function() {
+    return (
+      React.createElement("div", null, 
+        React.createElement("h1", {className: "link-list"}, "LINK LIST")
+      )
+    )
+  }
+});
+
+module.exports = LinkList;
+
+
+},{"react":157}],160:[function(require,module,exports){
+var React = require('react'),
+  LinkList = require('./linklist'),
+  InputBar = require('./inputbar');
+
+var Shooooort = React.createClass({displayName: "Shooooort",
+  render: function() {
+    return (
+      React.createElement("div", null, 
+        React.createElement(InputBar, null), 
+        React.createElement(LinkList, null)
+      )
+    )
+  }
+});
+
+module.exports = Shooooort;
+
+
+},{"./inputbar":158,"./linklist":159,"react":157}]},{},[1]);
