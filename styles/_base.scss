@@ -79,8 +79,21 @@ button {
   font-size: 14px;
   font-family: 'Roboto-Regular';
   height: 40px;
+  float: right;
+  height: 44px;
+  letter-spacing: .06em;
+  position: relative;
+  width: 149px;
 
   &:focus {
     outline: 0;
   }
+
+  &.disabled {
+    cursor: default;
+  }
+}
+
+table {
+  border: none;
 }

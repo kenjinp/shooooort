@@ -19985,14 +19985,57 @@ module.exports = require('./lib/React');
 var React = require('react');
 
 var InputBar = React.createClass({displayName: "InputBar",
+
+  handleButtonClick: function() {
+    var url = React.findDOMNode(this.refs.inputBar).value;
+    if (url !== '' && url !== ' ') {
+      this.setState({
+          button: 'disabled',
+          input: 'input-bar'
+      });
+      React.findDOMNode(this.refs.inputBar).value = '';
+      this.props.onSubmitLink(url);
+    }
+  },
+
+  handleKeyPress: function(e) {
+    if (e.keyCode === 13) {
+      console.log('key');
+      this.handleButtonClick();
+    }
+  },
+
+  handleChange: function() {
+    this.setState({
+      button: 'active',
+      input: 'input-bar has-input'
+    });
+  },
+
+  getInitialState: function() {
+    return {
+      button: 'disabled',
+      input: 'input-bar'
+    };
+  },
+
   render: function() {
     return (
       React.createElement("div", {className: "input-holder"}, 
         React.createElement("input", {
-          className: "input-bar", 
+          className:  this.state.input, 
           type: "text", 
-          placeholder: "Paste the link you want to shorten here"}), 
-        React.createElement("button", null, "Shorten this link")
+          ref: "inputBar", 
+          placeholder: "Paste the link you want to shorten here", 
+          onInput:  this.handleChange, 
+          onKeyDown:  this.handleKeyPress}), 
+        React.createElement("button", {
+          ref: "button", 
+          className:  this.state.button, 
+          type: "button", 
+          onClick:  this.handleButtonClick}, 
+          React.createElement("span", null, "Shorten this link")
+        )
       )
     )
   }
@@ -20006,26 +20049,43 @@ var React = require('react'),
     ShortLink = require('./shortlink');
 
 var LinkList = React.createClass({displayName: "LinkList",
+
+  handleClearHistory: function() {
+    this.props.onClearHistory();
+  },
+
   render: function() {
-    var links = this.props.links.map(function (link) {
+    if (this.props.links.length > 0) {
+      var links = this.props.links.map(function (link) {
+        return (
+          React.createElement(ShortLink, {link:  link, key:  link.shortcode})
+        )
+      });
       return (
-        React.createElement(ShortLink, {link:  link, key:  link.shortcode})
-      )
-    });
-    return (
-      React.createElement("div", {className: "list-holder"}, 
-        React.createElement("h2", null, "Previously shortened by you"), 
-        React.createElement("span", {className: "action"}, "Clear history"), 
-        React.createElement("table", null, 
-          React.createElement("tr", null, 
-            React.createElement("th", null, React.createElement("p", null, "Link")), 
-            React.createElement("th", null, React.createElement("p", null, "Visits")), 
-            React.createElement("th", null, React.createElement("p", null, "Last Visited"))
+        React.createElement("div", {className: "list-holder"}, 
+          React.createElement("h2", null, "Previously shortened by you"), 
+          React.createElement("span", {className: "action clear", onClick:  this.handleClearHistory}, 
+            "Clear history"
           ), 
-           links 
+          React.createElement("table", null, 
+            React.createElement("tr", null, 
+              React.createElement("th", null, React.createElement("p", null, "Link")), 
+              React.createElement("th", null, React.createElement("p", null, "Visits")), 
+              React.createElement("th", null, React.createElement("p", null, "Last Visited"))
+            ), 
+            React.createElement("tbody", null, 
+             links 
+            )
+          )
         )
       )
-    )
+    } else {
+      return (
+        React.createElement("div", {className: "list-holder"}, 
+          React.createElement("h2", null, "No links saved here yet!")
+        )
+      )
+    }
   }
 });
 
@@ -20038,11 +20098,39 @@ var React = require('react'),
   InputBar = require('./inputbar');
 
 var Shooooort = React.createClass({displayName: "Shooooort",
+
+  clearHistory: function() {
+    this.setState({ links: [] });
+  },
+
+  getHistory: function() {
+    this.setState({ links: linkDummy });
+  },
+
+  submitLink: function(url) {
+    var newLinks = this.state.links;
+    newLinks.unshift({
+      shortcode: 'random_'+Math.floor(Math.random() * 9000),
+      url: url,
+      visits: Math.floor(Math.random() * 9000),
+      lastVisited: new Date().toString(),
+    });
+    this.setState({ links: newLinks });
+  },
+
+  getInitialState: function() {
+    return { links: [] };
+  },
+
+  componentDidMount: function() {
+    this.getHistory();
+  },
+
   render: function() {
     return (
       React.createElement("div", null, 
-        React.createElement(InputBar, null), 
-        React.createElement(LinkList, {links:  linkDummy })
+        React.createElement(InputBar, {onSubmitLink:  this.submitLink}), 
+        React.createElement(LinkList, {links:  this.state.links, onClearHistory:  this.clearHistory})
       )
     )
   }
@@ -20053,25 +20141,25 @@ var linkDummy = [
     shortcode: 'apple',
     url: 'http://macintosh.com/is/company/for/nerds',
     visits: 2341,
-    lastVisited: '2 days ago'
+    lastVisited: '2012-04-23T18:25:43.511Z'
   },
   {
     shortcode: 'bannana',
     url: 'http://hammok.com/lol/roflmao/1/34',
     visits: 9001,
-    lastVisited: '1 days ago'
+    lastVisited: '2013-01-14T20:34:22'
   },
   {
     shortcode: 'carrot',
     url: 'http://bugs.io/dfasd9w9/ifa9/ajodifsj',
     visits: 3,
-    lastVisited: '1 month ago'
+    lastVisited: '2014-03-01T13:00:00Z'
   },
   {
     shortcode: 'long',
     url: 'http:supercalifragilisticexpialidocious/blah/blah/blah/blah/blah/blAH',
     visits: 999999,
-    lastVisited: '7 months ago'
+    lastVisited: '2014-03-01T13:00:00Z'
   }
 ]
 
@@ -20083,32 +20171,65 @@ var React = require('react'),
     ReactZeroClipboard = require('react-zeroClipboard');
 
 var ShortLink = React.createClass({displayName: "ShortLink",
+
+  timeSince: function(date) {
+
+    var seconds = Math.floor((new Date() - date) / 1000);
+
+    var interval = Math.floor(seconds / 31536000);
+
+    if (interval > 1) {
+      return interval + " years";
+    }
+    interval = Math.floor(seconds / 2592000);
+    if (interval > 1) {
+      return interval + " months";
+    }
+    interval = Math.floor(seconds / 86400);
+    if (interval > 1) {
+      return interval + " days";
+    }
+    interval = Math.floor(seconds / 3600);
+      if (interval > 1) {
+        return interval + " hours";
+    }
+    interval = Math.floor(seconds / 60);
+    if (interval > 1) {
+      return interval + " minutes";
+    }
+    return Math.floor(seconds) + " seconds";
+  },
+
   handleCopy: function() {
     this.setState({ msg: 'Copied!' });
   },
+
   handleLeave: function() {
     this.setState({ msg: 'Click to copy this link' });
   },
+
   getInitialState: function() {
     return {msg: 'Click to copy this link'};
   },
+
   render: function() {
     var link = this.props.link
-    var url = 'http://shooooort.com/' + this.props.link.shortcode;
+    var url = 'http://shooooort.com/' + link.shortcode;
+    var timeSince = this.timeSince(new Date(link.lastVisited)) + ' ago';
     return (
       React.createElement("tr", null, 
-      React.createElement(ReactZeroClipboard, {text:  url }, 
-        React.createElement("td", {className: "summary", onClick:  this.handleCopy, onMouseLeave:  this.handleLeave}, 
+        React.createElement(ReactZeroClipboard, {text:  url }, 
+          React.createElement("td", {className: "summary", onClick:  this.handleCopy, onMouseLeave:  this.handleLeave}, 
             React.createElement("span", {className: "short"}, "shooooort.com/"), 
             React.createElement("span", {className: "shortcode"},  link.shortcode), 
             React.createElement("span", {className: "action", id: "clip"},  this.state.msg), 
-          React.createElement("p", null, 
-             link.url
+            React.createElement("p", null, 
+               link.url
+            )
           )
-        )
         ), 
         React.createElement("td", null, " ",  link.visits, " "), 
-        React.createElement("td", null, " ",  link.lastVisited, " ")
+        React.createElement("td", {className: "time"},  timeSince )
       )
     )
   }

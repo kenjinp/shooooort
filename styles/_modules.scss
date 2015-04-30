@@ -36,7 +36,7 @@
     padding:0 0 0 18px;
     width: 458px;
 
-    &:focus {
+    &.has-input {
       color: $text-primary;
     }
   }
@@ -44,10 +44,6 @@
   button {
     background-color: $button-disabled-back;
     color: $text-button-disabled;
-    float: right;
-    height: 44px;
-    letter-spacing: .06em;
-    width: 149px;
 
     &.active {
       background-color: $accent;
@@ -98,6 +94,17 @@
 
       &:first-child {
         text-align:left;
+        width: 423px;
+      }
+
+      &:nth-child(2) {
+        //padding-bottom:32px;
+        width: 91px;
+      }
+
+      &:nth-child(3) {
+        //padding-bottom:32px;
+        width: 98px;
       }
     }
 
