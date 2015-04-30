@@ -15,19 +15,28 @@ var Shooooort = React.createClass({
 
 var linkDummy = [
   {
-    shortUrl: 'apple',
+    shortcode: 'apple',
+    url: 'http://macintosh.com/is/company/for/nerds',
     visits: 2341,
     lastVisited: '2 days ago'
   },
   {
-    shortUrl: 'bannana',
+    shortcode: 'bannana',
+    url: 'http://hammok.com/lol/roflmao/1/34',
     visits: 9001,
     lastVisited: '1 days ago'
   },
   {
-    shortUrl: 'carrot',
+    shortcode: 'carrot',
+    url: 'http://bugs.io/dfasd9w9/ifa9/ajodifsj',
     visits: 3,
     lastVisited: '1 month ago'
+  },
+  {
+    shortcode: 'long',
+    url: 'http:supercalifragilisticexpialidocious/blah/blah/blah/blah/blah/blAH',
+    visits: 999999,
+    lastVisited: '7 months ago'
   }
 ]
 

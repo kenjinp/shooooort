@@ -58,20 +58,89 @@
 
 .list-holder {
 
-  .clear {
+  .action {
     color: $accent;
     cursor: pointer;
     margin-left: 23px;
   }
 
+  .summary {
+    cursor: pointer;
+
+    &:hover {
+
+      .action {
+        opacity: 1;
+      }
+    }
+  }
+
+  .summary.zeroclipboard-is-hover {
+    .action{
+      opacity: 1;
+    }
+  }
+
   table {
-    margin: 32px 0;
+    margin: 34px 0;
+
     th {
       color: $text-button-disabled;
       font-family: 'Roboto-Regular';
       font-size: 14px;
-      text-align: left;
+      padding: 0;
+      text-align: center;
       text-transform: uppercase;
+
+      p {
+          margin: 0 0 34px;
+      }
+
+      &:first-child {
+        text-align:left;
+      }
+    }
+
+    td {
+      padding: 0;
+      text-align: center;
+
+      p {
+        @include ellipsis;
+        margin:8px 0 35px;
+        max-width: 370px;
+      }
+
+      .action {
+        margin-left: 38px;
+        opacity: 0;
+      }
+
+      .short{
+        font-family: 'Roboto-Regular';
+        font-size: 16px;
+        color: $text-primary;
+      }
+
+      .shortcode {
+        @extend .short;
+        color: $accent;
+      }
+
+      &:first-child {
+        text-align: left;
+        width: 436px;
+      }
+
+      &:nth-child(2) {
+        padding-bottom:32px;
+        width: 100px;
+      }
+
+      &:nth-child(3) {
+        padding-bottom:32px;
+        width: 108px;
+      }
     }
   }
 }

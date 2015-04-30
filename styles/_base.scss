@@ -17,6 +17,12 @@ $font-stack: Helvetica, sans-serif;
   border-radius: 3px;
 }
 
+@mixin ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 //!\\ Colors //!\\
 // main
 $accent:                #eb4a42;
