@@ -20,12 +20,16 @@
   padding: 0;
 }
 
+.hidden {
+  display: none;
+}
+
 .input-holder {
   height: 44px;
   margin: 54px 0 77px;
   position: relative;
 
-  .input-bar {
+  input[type="text"] {
     @include rounded;
     background-color: $background-light;
     border: 0;
@@ -36,7 +40,7 @@
     padding:0 0 0 18px;
     width: 458px;
 
-    &.has-input {
+    &.active {
       color: $text-primary;
     }
   }
@@ -48,6 +52,10 @@
     &.active {
       background-color: $accent;
       color: $background;
+    }
+
+    &.disabled {
+      cursor: default;
     }
   }
 }
@@ -62,6 +70,16 @@
 
   .summary {
     cursor: pointer;
+    position: relative;
+
+    .new-link-flag {
+      background-color: $accent;
+      height: 79px;
+      left: -23px;
+      top: -16px;
+      position: absolute;
+      width: 4px;
+    }
 
     &:hover {
 

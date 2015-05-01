@@ -3,64 +3,79 @@ var React = require('react'),
 
 var ShortLink = React.createClass({
 
-  timeSince: function(date) {
+  timeSince: function() {
+    var date = new Date(this.props.link.lastVisited)
 
     var seconds = Math.floor((new Date() - date) / 1000);
 
     var interval = Math.floor(seconds / 31536000);
 
     if (interval > 1) {
-      return interval + " years";
+      return interval + " years ago";
     }
     interval = Math.floor(seconds / 2592000);
     if (interval > 1) {
-      return interval + " months";
+      return interval + " months ago";
     }
     interval = Math.floor(seconds / 86400);
     if (interval > 1) {
-      return interval + " days";
+      return interval + " days ago";
     }
     interval = Math.floor(seconds / 3600);
       if (interval > 1) {
-        return interval + " hours";
+        return interval + " hours ago";
     }
     interval = Math.floor(seconds / 60);
     if (interval > 1) {
-      return interval + " minutes";
+      return interval + " minutes ago";
     }
     return Math.floor(seconds) + " seconds";
   },
 
   handleCopy: function() {
-    this.setState({ msg: 'Copied!' });
+
+    this.setState({ copied: true });
   },
 
   handleLeave: function() {
-    this.setState({ msg: 'Click to copy this link' });
+    this.setState({ copied: false });
+  },
+
+  message: function() {
+    message = this.state.copied ? 'Copied' : 'Click to copy this link';
+    return message;
   },
 
   getInitialState: function() {
-    return {msg: 'Click to copy this link'};
+    //is there a better way to do this besides state?
+    return ({ copied: false });
+  },
+
+  newLinkFlag: function() {
+    if (this.props.link.old === false) {
+      return <span className="new-link-flag"></span>
+    }
   },
 
   render: function() {
     var link = this.props.link
     var url = 'http://shooooort.com/' + link.shortcode;
-    var timeSince = this.timeSince(new Date(link.lastVisited)) + ' ago';
+
     return (
       <tr>
         <ReactZeroClipboard text={ url } >
           <td className="summary" onClick={ this.handleCopy } onMouseLeave={ this.handleLeave }>
+            { this.newLinkFlag() }
             <span className="short">shooooort.com/</span>
             <span className="shortcode">{ link.shortcode }</span>
-            <span className="action" id="clip">{ this.state.msg }</span>
+            <span className="action" id="clip">{ this.message() }</span>
             <p>
               { link.url }
             </p>
           </td>
         </ReactZeroClipboard>
         <td> { link.visits } </td>
-        <td className="time">{ timeSince }</td>
+        <td className="time">{ this.timeSince() }</td>
       </tr>
     )
   }

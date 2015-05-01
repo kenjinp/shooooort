@@ -94,7 +94,7 @@ describe('Shooooort', function() {
   });
 
   describe('get history from user', function() {
-    it('should get a list of objects from somewhere', function() {
+    it('should get a list of objects from cookies', function() {
       //pending api
     });
   });
@@ -115,10 +115,12 @@ describe('Shooooort', function() {
       });
     });
 
-    it('should show no shortlinks', function() {
+    it('should delete the cookies of history', function() {
 
     });
   });
+
+
 
   describe('submit a new link', function() {
 
@@ -174,6 +176,9 @@ describe('Shooooort', function() {
         var afterLinks = TestUtils.scryRenderedDOMComponentsWithClass(testGlobals.tree, 'summary');
         expect(afterLinks - beforeLinks).to.be(0);
       });
+    });
+
+    it('should save the new history in cookies', function() {
     });
   });
 

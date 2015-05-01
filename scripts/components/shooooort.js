@@ -1,26 +1,54 @@
-var React = require('react'),
-  LinkList = require('./linklist'),
-  InputBar = require('./inputbar');
+var React = require('react/addons'),
+    LinkList = require('./linklist'),
+    InputBar = require('./inputbar'),
+    cookie = require('react-cookie'),
+    apiHelper = require('../apiHelper');
 
 var Shooooort = React.createClass({
 
   clearHistory: function() {
     this.setState({ links: [] });
+    //a way around the problem below
+    this.saveHistory([]);
   },
 
   getHistory: function() {
-    this.setState({ links: linkDummy });
+    var oldLinks = cookie.load('links');
+    if (oldLinks === undefined ) {
+      return;
+    } else {
+      for (var i = 0; i < oldLinks.length; i++) {
+        //tell the client this is old data
+        oldLinks[i].old = true;
+      }
+      this.setState({ links: oldLinks });
+    }
+  },
+
+  saveHistory: function(links) {
+    //I would like to use state here, but it always is
+    //not the updated value from
+    //submitLink(), and is missing the last link
+    //so I've used links as a way around it
+    cookie.save('links', links);
   },
 
   submitLink: function(url) {
-    var newLinks = this.state.links;
-    newLinks.unshift({
+    helper.postShorten(url, function(err, res, body) {
+      console.log(err);
+      console.log(res);
+      console.log(body);
+    })
+    var newLink = [{
       shortcode: 'random_'+Math.floor(Math.random() * 9000),
       url: url,
       visits: Math.floor(Math.random() * 9000),
       lastVisited: new Date().toString(),
-    });
-    this.setState({ links: newLinks });
+      old: false
+    }];
+    var newLinks = React.addons.update( this.state.links, {$unshift: newLink});
+    //the documentation tells me this should work, but doesn't...
+    this.setState({ links: newLinks }, this.saveHistory(newLinks));
   },
 
   getInitialState: function() {
@@ -40,32 +68,5 @@ var Shooooort = React.createClass({
     )
   }
 });
-
-var linkDummy = [
-  {
-    shortcode: 'apple',
-    url: 'http://macintosh.com/is/company/for/nerds',
-    visits: 2341,
-    lastVisited: '2012-04-23T18:25:43.511Z'
-  },
-  {
-    shortcode: 'bannana',
-    url: 'http://hammok.com/lol/roflmao/1/34',
-    visits: 9001,
-    lastVisited: '2013-01-14T20:34:22'
-  },
-  {
-    shortcode: 'carrot',
-    url: 'http://bugs.io/dfasd9w9/ifa9/ajodifsj',
-    visits: 3,
-    lastVisited: '2014-03-01T13:00:00Z'
-  },
-  {
-    shortcode: 'long',
-    url: 'http:supercalifragilisticexpialidocious/blah/blah/blah/blah/blah/blAH',
-    visits: 999999,
-    lastVisited: '2014-03-01T13:00:00Z'
-  }
-]
 
 module.exports = Shooooort;

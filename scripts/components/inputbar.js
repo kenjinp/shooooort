@@ -3,35 +3,32 @@ var React = require('react');
 var InputBar = React.createClass({
 
   handleButtonClick: function() {
-    var url = React.findDOMNode(this.refs.inputBar).value;
+    var url = this.state.inputValue;
     if (url !== '' && url !== ' ') {
-      this.setState({
-          button: 'disabled',
-          input: 'input-bar'
-      });
-      React.findDOMNode(this.refs.inputBar).value = '';
+      this.setState({ inputValue: '' });
       this.props.onSubmitLink(url);
     }
   },
 
   handleKeyPress: function(e) {
-    if (e.keyCode === 13) {
-      console.log('key');
+    if (e.keyCode === 13)
       this.handleButtonClick();
-    }
   },
 
-  handleChange: function() {
+  handleInputChange: function(e) {
     this.setState({
-      button: 'active',
-      input: 'input-bar has-input'
+      inputValue: e.target.value
     });
+  },
+
+  classSwitch: function() {
+    var className = this.state.inputValue !== '' ? 'active' : 'disabled';
+      return className;
   },
 
   getInitialState: function() {
     return {
-      button: 'disabled',
-      input: 'input-bar'
+      inputValue: '',
     };
   },
 
@@ -39,15 +36,16 @@ var InputBar = React.createClass({
     return (
       <div className="input-holder">
         <input
-          className={ this.state.input }
+          className={ this.classSwitch() }
           type="text"
           ref= "inputBar"
           placeholder="Paste the link you want to shorten here"
-          onInput={ this.handleChange }
-          onKeyDown={ this.handleKeyPress }/>
+          value={ this.state.inputValue }
+          onKeyDown={ this.handleKeyPress }
+          onChange={ this.handleInputChange }/>
         <button
           ref="button"
-          className={ this.state.button }
+          className={ this.classSwitch() }
           type="button"
           onClick={ this.handleButtonClick }>
           <span>Shorten this link</span>
