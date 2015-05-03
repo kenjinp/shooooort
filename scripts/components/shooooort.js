@@ -52,7 +52,6 @@ var Shooooort = React.createClass({
 
   getHistory: function() {
     var oldLinks = cookie.load('links');
-    console.log(oldLinks);
     if (oldLinks === undefined ) return;
     for (var i = 0; i < oldLinks.length; i++) {
       var shortcode = oldLinks[i].shortcode;
@@ -80,7 +79,6 @@ var Shooooort = React.createClass({
   },
 
   buildLinks: function(newLink, save) {
-    console.log('in buidlinks');
     var newLinks = React.addons.update( this.state.links, {$unshift: newLink});
     //the documentation tells me this should work, but doesn't...
     if (save) {
