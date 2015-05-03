@@ -3,7 +3,8 @@ var expect = require('chai').expect,
     Shooooort = require('../scripts/components/shooooort'),
     LinkList = require('../scripts/components/linklist'),
     InputBar = require('../scripts/components/inputbar'),
-    ShortLink = require('../scripts/components/shortlink');
+    ShortLink = require('../scripts/components/shortlink'),
+    cookie = require('react-cookie');
 
 var testGlobals = {};
 
@@ -93,12 +94,6 @@ describe('Shooooort', function() {
     });
   });
 
-  describe('get history from user', function() {
-    it('should get a list of objects from cookies', function() {
-      //pending api
-    });
-  });
-
   describe('clear history', function() {
 
     beforeEach(function() {
@@ -107,16 +102,30 @@ describe('Shooooort', function() {
     });
 
     it('should remove the shortlinks', function() {
-      var button = TestUtils.findRenderedDOMComponentWithClass(testGlobals.tree, 'clear');
-      TestUtils.Simulate.click(button);
+      var input = TestUtils.findRenderedDOMComponentWithTag(testGlobals.tree, 'input');
+      var submitButton = TestUtils.findRenderedDOMComponentWithTag(testGlobals.tree, 'button');
+      var beforeLinks = TestUtils.scryRenderedDOMComponentsWithClass(testGlobals.tree, 'summary');
+      TestUtils.Simulate.change(input, {target: { value: 'blahblah'} });
+      TestUtils.Simulate.click(submitButton);
       setTimeout(function() {
+        var button = TestUtils.findRenderedDOMComponentWithClass(testGlobals.tree, 'action');
+        TestUtils.Simulate.click(button);
         var afterLinks = TestUtils.scryRenderedDOMComponentsWithClass(testGlobals.tree, 'summary');
         expect(afterLinks).to.have.legth(1);
       });
     });
 
     it('should delete the cookies of history', function() {
-
+      var input = TestUtils.findRenderedDOMComponentWithTag(testGlobals.tree, 'input');
+      var submitButton = TestUtils.findRenderedDOMComponentWithTag(testGlobals.tree, 'button');
+      var beforeLinks = TestUtils.scryRenderedDOMComponentsWithClass(testGlobals.tree, 'summary');
+      TestUtils.Simulate.change(input, {target: { value: 'blahblah'} });
+      TestUtils.Simulate.click(submitButton);
+      setTimeout(function() {
+        var button = TestUtils.findRenderedDOMComponentWithClass(testGlobals.tree, 'action');
+        TestUtils.Simulate.click(button);
+        expect(cookie.load('links')).to.have.length(0);
+      });
     });
   });
 
@@ -179,6 +188,14 @@ describe('Shooooort', function() {
     });
 
     it('should save the new history in cookies', function() {
+      var input = TestUtils.findRenderedDOMComponentWithTag(testGlobals.tree, 'input');
+      var button = TestUtils.findRenderedDOMComponentWithTag(testGlobals.tree, 'button');
+      var beforeLinks = TestUtils.scryRenderedDOMComponentsWithClass(testGlobals.tree, 'summary');
+      TestUtils.Simulate.change(input, {target: { value: 'blahblah'} });
+      TestUtils.Simulate.click(button);
+      setTimeout(function() {
+        expect(cookie.load('links')).to.have.length(1);
+      });
     });
   });
 

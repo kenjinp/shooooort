@@ -2,9 +2,47 @@ var React = require('react/addons'),
     LinkList = require('./linklist'),
     InputBar = require('./inputbar'),
     cookie = require('react-cookie'),
-    apiHelper = require('../apiHelper');
+    config = require('../../config'),
+    request = require('ajax-request');
+    Q = require('q');
 
 var Shooooort = React.createClass({
+
+  getShortcode: function(url) {
+    var deferred = Q.defer(),
+        postUrl = config.api + 'shorten';
+    request.post({
+      url: postUrl,
+      method: 'POST',
+      data: { 'url': url },
+      headers: { 'Content-Type': 'application/json' },
+      json: true
+    }, function(err, res, data) {
+      if(err) deferred.reject(console.log(err));
+      deferred.resolve(data.shortcode);
+    });
+    return deferred.promise;
+  },
+
+  getStats: function(shortcode, url) {
+    var deferred = Q.defer();
+    request({
+      url: config.api + shortcode + '/stats',
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+      json: true
+    }, function(err, res, data) {
+      if(err) deferred.reject(console.log(err));
+      var linkInfo = {
+        url: url,
+        shortcode: shortcode,
+        visits: data.redirectCount,
+        lastVisited: data.lastSeenDate,
+      };
+      deferred.resolve(linkInfo);
+    });
+    return deferred.promise;
+  },
 
   clearHistory: function() {
     this.setState({ links: [] });
@@ -14,14 +52,22 @@ var Shooooort = React.createClass({
 
   getHistory: function() {
     var oldLinks = cookie.load('links');
-    if (oldLinks === undefined ) {
-      return;
-    } else {
-      for (var i = 0; i < oldLinks.length; i++) {
-        //tell the client this is old data
-        oldLinks[i].old = true;
-      }
-      this.setState({ links: oldLinks });
+    console.log(oldLinks);
+    if (oldLinks === undefined ) return;
+    for (var i = 0; i < oldLinks.length; i++) {
+      var shortcode = oldLinks[i].shortcode;
+      var url = oldLinks[i].url;
+      var self = this;
+      this.getStats(shortcode, url)
+        .then(function(linkInfo) {
+          return self.buildLinks([{
+            shortcode: linkInfo.shortcode,
+            url: linkInfo.url,
+            visits: linkInfo.visits,
+            lastVisited: linkInfo.lastVisited,
+            old: true
+          }], false);
+        }).done();
     }
   },
 
@@ -33,22 +79,34 @@ var Shooooort = React.createClass({
     cookie.save('links', links);
   },
 
-  submitLink: function(url) {
-    helper.postShorten(url, function(err, res, body) {
-      console.log(err);
-      console.log(res);
-      console.log(body);
-    })
-    var newLink = [{
-      shortcode: 'random_'+Math.floor(Math.random() * 9000),
-      url: url,
-      visits: Math.floor(Math.random() * 9000),
-      lastVisited: new Date().toString(),
-      old: false
-    }];
+  buildLinks: function(newLink, save) {
+    console.log('in buidlinks');
     var newLinks = React.addons.update( this.state.links, {$unshift: newLink});
     //the documentation tells me this should work, but doesn't...
-    this.setState({ links: newLinks }, this.saveHistory(newLinks));
+    if (save) {
+      this.setState({ links: newLinks }, this.saveHistory(newLinks));
+    } else {
+      this.setState({ links: newLinks });
+    }
+
+  },
+
+  submitLink: function(url) {
+    var self = this;
+    this.getShortcode(url)
+      .then(function(shortcode) {
+        return self.getStats(shortcode, url);
+      })
+      .then(function(linkInfo) {
+        var newLink = [{
+          shortcode: linkInfo.shortcode,
+          url: linkInfo.url,
+          visits: linkInfo.visits,
+          lastVisited: linkInfo.lastVisited,
+          old: false
+        }];
+        self.buildLinks(newLink, true);
+      });
   },
 
   getInitialState: function() {

@@ -33,7 +33,6 @@ var ShortLink = React.createClass({
   },
 
   handleCopy: function() {
-
     this.setState({ copied: true });
   },
 
