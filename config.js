@@ -1,3 +1,3 @@
 module.exports = {
-  api: 'http://gymia-shorty.herokuapp.com/'
+  api: 'http://gymia-shorty.herokuapp.com:80/'
 }

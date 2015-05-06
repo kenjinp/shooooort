@@ -4,7 +4,7 @@ var InputBar = React.createClass({
 
   handleButtonClick: function() {
     var url = this.state.inputValue;
-    if (url !== '' && url !== ' ') {
+    if (url.trim() !== '') {
       this.setState({ inputValue: '' });
       this.props.onSubmitLink(url);
     }

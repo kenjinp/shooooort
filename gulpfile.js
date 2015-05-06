@@ -21,16 +21,16 @@ var gulp = require('gulp'),
     karma = require('gulp-karma'),
 
     reload = browserSync.reload,
-    p = {
+    sources = {
       test: './tests/*.js',
-      jsx: './scripts/app.js',
+      js: './scripts/app.js',
       scss: 'styles/*.scss',
       html: './*.html',
       fonts: 'styles/fonts/*.ttf',
       bundle: 'app.js',
       distJs: 'dist/js',
       distCss: 'dist/css',
-      distHtml: './',
+      distHTML: './',
       distFonts: 'dist/css/fonts/',
     };
 
@@ -47,14 +47,14 @@ gulp.task('browserSync', function() {
 });
 
 gulp.task('watchify', function() {
-  var bundler = watchify(browserify(p.jsx, watchify.args));
+  var bundler = watchify(browserify(sources.js, watchify.args));
 
   function rebundle() {
     return bundler
       .bundle()
       .on('error', notify.onError())
-      .pipe(source(p.bundle))
-      .pipe(gulp.dest(p.distJs))
+      .pipe(source(sources.bundle))
+      .pipe(gulp.dest(sources.distJs))
       .pipe(reload({stream: true}));
   }
 
@@ -64,50 +64,50 @@ gulp.task('watchify', function() {
 });
 
 gulp.task('browserify', function() {
-  browserify(p.jsx)
+  browserify(sources.js)
     .transform(reactify)
     .bundle()
-    .pipe(source(p.bundle))
+    .pipe(source(sources.bundle))
     .pipe(buffer())
     .pipe(sourcemaps.init({loadMaps: true}))
     .pipe(uglify())
     .pipe(sourcemaps.write('./'))
-    .pipe(gulp.dest(p.distJs));
+    .pipe(gulp.dest(sources.distJs));
 });
 
 gulp.task('styles', function() {
-  gulp.src(p.scss)
-    .pipe(changed(p.distCss))
+  gulp.src(sources.scss)
+    .pipe(changed(sources.distCss))
     .pipe(sass({errLogToConsole: true}))
     .on('error', notify.onError())
     .pipe(autoprefixer('last 1 version'))
     .pipe(csso())
-    .pipe(gulp.dest(p.distCss))
+    .pipe(gulp.dest(sources.distCss))
     .pipe(reload({stream: true}));
 });
 
 gulp.task('htmlpage', function() {
-  gulp.src(p.html)
-    .pipe(changed(p.html))
-    .pipe(gulp.dest(p.distHtml))
+  gulp.src(sources.html)
+    .pipe(changed(sources.html))
+    .pipe(gulp.dest(sources.distHTML))
     .pipe(reload({stream: true}));
 });
 
 //all assets?
 gulp.task('fonts', function() {
-  return gulp.src(p.fonts)
-    .pipe(gulp.dest(p.distFonts));
+  return gulp.src(sources.fonts)
+    .pipe(gulp.dest(sources.distFonts));
 });
 
 gulp.task('scss-lint', function() {
-  gulp.src(p.scss)
+  gulp.src(sources.scss)
     .pipe(scsslint())
     .pipe(scsslint.failReporter('E'))
     .on('error', notify.onError());
 });
 
 gulp.task('jshint', function() {
-  gulp.src(p.jsx)
+  gulp.src(sources.js)
     .pipe(jshint({linter: require('jshint-jsx').JSXHINT}))
     .pipe(jshint.reporter('default'))
     .pipe(jshint.reporter('fail'))
@@ -115,7 +115,7 @@ gulp.task('jshint', function() {
 });
 
 gulp.task('test', function() {
-  gulp.src(p.test)
+  gulp.src(sources.test)
     .pipe(karma({
       configFile: 'karma.conf.js',
       action: 'run'
@@ -125,11 +125,11 @@ gulp.task('test', function() {
 
 gulp.task('watchTask', function() {
     //watch js for linting
-  gulp.watch(p.jsx, ['jshint']);
+  gulp.watch(sources.js, ['jshint']);
     //wacth for scss changes
-  gulp.watch(p.scss, ['styles', 'scss-lint']);
+  gulp.watch(sources.scss, ['styles', 'scss-lint']);
     //watch for html changes
-  gulp.watch(p.html, ['htmlpage']);
+  gulp.watch(sources.html, ['htmlpage']);
 });
 
 gulp.task('watch', ['clean'], function() {

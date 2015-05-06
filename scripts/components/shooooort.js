@@ -1,7 +1,8 @@
 var React = require('react/addons'),
     LinkList = require('./linklist'),
     InputBar = require('./inputbar'),
-    cookie = require('react-cookie'),
+    Store = require('local-store'),
+    store = Store(),
     config = require('../../config'),
     request = require('ajax-request');
     Q = require('q');
@@ -18,8 +19,18 @@ var Shooooort = React.createClass({
       headers: { 'Content-Type': 'application/json' },
       json: true
     }, function(err, res, data) {
-      if(err) deferred.reject(console.log(err));
-      deferred.resolve(data.shortcode);
+      if(err) {
+        deferred.reject(function(err) {
+          console.log(err);
+        });
+      }
+      if(data === undefined) {
+        deferred.reject(function(err) {
+          console.log(err);
+        });
+      } else {
+        deferred.resolve(data.shortcode);
+      }
     });
     return deferred.promise;
   },
@@ -32,7 +43,11 @@ var Shooooort = React.createClass({
       headers: { 'Content-Type': 'application/json' },
       json: true
     }, function(err, res, data) {
-      if(err) deferred.reject(console.log(err));
+      if(err) {
+        deferred.reject(function(err) {
+          console.log(err);
+        });
+      }
       var linkInfo = {
         url: url,
         shortcode: shortcode,
@@ -51,8 +66,8 @@ var Shooooort = React.createClass({
   },
 
   getHistory: function() {
-    var oldLinks = cookie.load('links');
-    if (oldLinks === undefined ) return;
+    var oldLinks = store.get('links');
+    if (oldLinks === undefined || oldLinks === null) return;
     for (var i = 0; i < oldLinks.length; i++) {
       var shortcode = oldLinks[i].shortcode;
       var url = oldLinks[i].url;
@@ -66,6 +81,8 @@ var Shooooort = React.createClass({
             lastVisited: linkInfo.lastVisited,
             old: true
           }], false);
+        }, function(progress) {
+
         }).done();
     }
   },
@@ -75,14 +92,14 @@ var Shooooort = React.createClass({
     //not the updated value from
     //submitLink(), and is missing the last link
     //so I've used links as a way around it
-    cookie.save('links', links);
+    store.set('links', links);
   },
 
   buildLinks: function(newLink, save) {
     var newLinks = React.addons.update( this.state.links, {$unshift: newLink});
     //the documentation tells me this should work, but doesn't...
     if (save) {
-      this.setState({ links: newLinks }, this.saveHistory(newLinks));
+      this.setState({ links: newLinks }, this.saveHistory.bind(this, newLinks));
     } else {
       this.setState({ links: newLinks });
     }
